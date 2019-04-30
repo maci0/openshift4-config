@@ -1,0 +1,6 @@
+---
+- name: Create CR
+  command: "{{ oc }} apply -f -"
+  args:
+    stdin: "{{ lookup('template', template) }}"
+...

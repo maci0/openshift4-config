@@ -1,0 +1,26 @@
+---
+oc: /usr/bin/oc --config /etc/origin/master/admin.kubeconfig
+
+# password for the local admin user
+ocp_admin_password: CHANGEME
+
+# example LDAP configuration
+#ldap_provider_name: Active_Directory
+#ldap_url: ldaps://ad1.example.com/ou=engineering,dc=example,dc=com?sAMAccountName
+#ldap_insecure: false
+#ldap_ca_cert: ACME-root-ca.crt
+
+#ldap_bind_dn: "{{ ad_bind_dn }}"
+#ldap_bind_password: "{{ ad_bind_password }}"
+
+#ldap_attributes:
+#  attributes:
+#    email:
+#      - mail
+#    name:
+#      - displayName
+#    id:
+#      - dn
+#    preferredUsername:
+#      - sAMAccountName
+...
