@@ -2,7 +2,7 @@
 oc: /usr/bin/oc --config /etc/origin/master/admin.kubeconfig
 
 # password for the local admin user
-ocp_admin_password: CHANGEME
+local_admin_password: CHANGEME
 
 # example LDAP configuration
 #ldap_provider_name: Active_Directory
