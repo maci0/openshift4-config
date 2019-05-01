@@ -6,3 +6,17 @@ registries_conf: |
   [registries.block]
   registries = ['docker.io']
 
+registries_for_import:
+  - domainName: registry.redhat.io
+    insecure: false
+  - domainName: quay.io
+    insecure: false
+
+source_blocked_registries:
+  - docker.io
+  - dockerhub.com
+
+source_allowed_registries:
+  - registry.redhat.io
+  - registry.access.redhat.com
+
