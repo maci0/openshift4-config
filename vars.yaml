@@ -10,8 +10,8 @@ local_admin_password: CHANGEME
 #ldap_insecure: false
 #ldap_ca_cert: ACME-root-ca.crt
 
-#ldap_bind_dn: "{{ ad_bind_dn }}"
-#ldap_bind_password: "{{ ad_bind_password }}"
+#ldap_bind_dn: CN=svc_ocp_auth,ou=Service Accounts,dc=example,dc=com
+#ldap_bind_password: CHANGEME
 
 #ldap_attributes:
 #  attributes:
