@@ -1,0 +1,34 @@
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+  - name: Local_Authentication
+    mappingMethod: claim 
+    type: HTPasswd
+    htpasswd:
+      fileData:
+        name: htpasswd-secret
+{% if ldap_provider_name is defined %}
+  - name: {{ ldap_provider_name }}
+    mappingMethod: claim
+    type: LDAP
+    ldap:
+      url: {{ ldap_url }}
+{% if ldap_bind_dn is defined %}
+      bindDN: {{ ldap_bind_dn }}
+{% endif %}
+{% if ldap_bind_password is defined %}
+      bindPassword:
+        name: ldap-bind-secret
+{% endif %}
+{% if ldap_ca_cert is defined %}
+      ca:
+        name: ldap-ca-config-map
+{% endif %}
+{% if ldap_attributes is defined %}
+      {{ ldap_attributes | to_nice_yaml(indent=8) }}
+{% endif %}
+      insecure: {{ ldap_insecure }}
+{% endif %}

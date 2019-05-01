@@ -1,0 +1,15 @@
+---
+- name: Configure OpenShift 4
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - vars.yaml
+  tasks:
+    - import_tasks: tasks/create-htpasswd-secret.yaml
+
+    - import_tasks: tasks/create-ldap-configuration.yaml
+
+    - import_tasks: tasks/create-cr.yaml
+      vars:
+        template: oauth.yaml.j2
+...

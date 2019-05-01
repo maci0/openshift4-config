@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 applied_config:
   - image-policy
   - oauth/ldap
@@ -24,3 +25,29 @@ source_allowed_registries:
   - registry.redhat.io
   - registry.access.redhat.com
 
+
+oc: /usr/bin/oc --config /etc/origin/master/admin.kubeconfig
+
+# password for the local admin user
+local_admin_password: CHANGEME
+
+# example LDAP configuration
+#ldap_provider_name: Active_Directory
+#ldap_url: ldaps://ad1.example.com/ou=engineering,dc=example,dc=com?sAMAccountName
+#ldap_insecure: false
+#ldap_ca_cert: ACME-root-ca.crt
+
+#ldap_bind_dn: CN=svc_ocp_auth,ou=Service Accounts,dc=example,dc=com
+#ldap_bind_password: CHANGEME
+
+#ldap_attributes:
+#  attributes:
+#    email:
+#      - mail
+#    name:
+#      - displayName
+#    id:
+#      - dn
+#    preferredUsername:
+#      - sAMAccountName
+...
