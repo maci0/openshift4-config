@@ -1,6 +1,6 @@
 applied_config:
-  - ../template/image-policy/
-  - ../template/oauth/
+  - image-policy
+  - oauth/ldap
 
 registries_conf: |
   [registries.search]

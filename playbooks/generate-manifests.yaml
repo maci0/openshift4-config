@@ -1,0 +1,47 @@
+---
+- hosts: localhost
+  become: false
+  gather_facts: false
+  vars:
+    template_path: "../templates/"
+    temp_dir_path: "../generated-manifests"
+  vars_files:
+    - "../vars.yaml"
+
+  tasks:
+  - name: Clean manifests dir
+    shell: "rm -rf {{ temp_dir_path}}/*"
+
+  - block:
+    - name: Populate templates directory structure in manifests dir
+      file:
+        state: directory
+        dest: "{{temp_dir_path}}/{{ item.path }}"
+      with_filetree: "{{ template_path }}"
+      when: item.state == 'directory'
+
+    - name: Populate templates
+      template:
+        src: "{{ item.src }}"
+        dest: "{{temp_dir_path}}/{{ item.path }}"
+      with_filetree: "{{template_path}}"
+      when: item.state == 'file'
+    when: applied_config is not defined
+
+  - block:
+    - name: Populate templates directory structure in manifests dir
+      file:
+        state: directory
+        dest: "{{temp_dir_path}}/{{ item }}"
+      with_items: "{{ applied_config }}"
+    
+    - name: Populate templates
+      template:
+        src: "{{ item.src }}"
+        dest: "{{temp_dir_path}}/{{ item.path }}"
+      with_filetree: "{{template_path}}"
+      when: item.path | dirname in applied_config and item.state == 'file'
+    when: applied_config is defined
+
+...
+    
