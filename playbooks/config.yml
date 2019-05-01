@@ -16,19 +16,39 @@
     set_fact:
       temp_dir_path: "{{tempdir.stdout}}"
 
-  - name: Populate templates directory structure in temp dir
-    file:
-      state: directory
-      dest: "{{temp_dir_path}}/{{ item.path }}"
-    with_filetree: "{{ template_path }}"
-    when: item.state == 'directory'
 
-  - name: Populate templates
-    template:
-      src: "{{ item.src }}"
-      dest: "{{temp_dir_path}}/{{ item.path }}"
-    with_filetree: "{{template_path}}"
-    when: item.state == 'file'
+# if applied config is not defined then proceed with whole templates directory
+  - block:
+    - name: Populate templates directory structure in manifests dir
+      file:
+        state: directory
+        dest: "{{temp_dir_path}}/{{ item.path }}"
+      with_filetree: "{{ template_path }}"
+      when: item.state == 'directory'
+
+    - name: Populate templates
+      template:
+        src: "{{ item.src }}"
+        dest: "{{temp_dir_path}}/{{ item.path }}"
+      with_filetree: "{{template_path}}"
+      when: item.state == 'file'
+    when: applied_config is not defined
+
+# if applied config is defined then proceed only with defined subdirectories
+  - block:
+    - name: Populate templates directory structure in manifests dir
+      file:
+        state: directory
+        dest: "{{temp_dir_path}}/{{ item }}"
+      with_items: "{{ applied_config }}"
+    
+    - name: Populate templates
+      template:
+        src: "{{ item.src }}"
+        dest: "{{temp_dir_path}}/{{ item.path }}"
+      with_filetree: "{{template_path}}"
+      when: item.path | dirname in applied_config and item.state == 'file'
+    when: applied_config is defined
 
   - name: Apply configurations
     command: "{{ oc }} apply -f {{item.src}}"

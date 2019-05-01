@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 applied_config:
   - image-policy
   - oauth/ldap
