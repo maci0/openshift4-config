@@ -1,0 +1,8 @@
+registries_conf: |
+  [registries.search]
+  registries = ['registry.access.redhat.com', 'registry.redhat.io']
+  [registries.insecure]
+  registries = []
+  [registries.block]
+  registries = ['docker.io']
+
