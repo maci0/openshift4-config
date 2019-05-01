@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ldap-ca-config-map
+  namespace: openshift-config
+data:                                      
+  ca.crt: |
+    {{ lookup('file', ldap_ca_cert) | default('') | regex_replace('\n', '\n    ') }}
