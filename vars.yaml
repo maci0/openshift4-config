@@ -1,4 +1,31 @@
----
+<<<<<<< HEAD
+applied_config:
+  - image-policy
+  - oauth/ldap
+
+registries_conf: |
+  [registries.search]
+  registries = ['registry.access.redhat.com', 'registry.redhat.io']
+  [registries.insecure]
+  registries = []
+  [registries.block]
+  registries = ['docker.io']
+
+registries_for_import:
+  - domainName: registry.redhat.io
+    insecure: false
+  - domainName: quay.io
+    insecure: false
+
+source_blocked_registries:
+  - docker.io
+  - dockerhub.com
+
+source_allowed_registries:
+  - registry.redhat.io
+  - registry.access.redhat.com
+
+
 oc: /usr/bin/oc --config /etc/origin/master/admin.kubeconfig
 
 # password for the local admin user
