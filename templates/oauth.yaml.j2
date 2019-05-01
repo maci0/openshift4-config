@@ -4,12 +4,14 @@ metadata:
   name: cluster
 spec:
   identityProviders:
+{% if htpasswd is defined %}
   - name: Local_Authentication
     mappingMethod: claim 
     type: HTPasswd
     htpasswd:
       fileData:
         name: htpasswd-secret
+{% endif %}
 {% if ldap_provider_name is defined %}
   - name: {{ ldap_provider_name }}
     mappingMethod: claim

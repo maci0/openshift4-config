@@ -1,0 +1,32 @@
+---
+- name: Create temporary htpasswd file
+  tempfile:
+    state: file
+  register: htpasswd_file
+
+- name: Create htpasswd content
+  htpasswd:
+    path: "{{ htpasswd_file.path }}"
+    mode: 0600
+    name: admin
+    password: "{{ local_admin_password }}"
+  no_log: true
+
+- name: Encode htpasswd file
+  set_fact:
+    htpasswd: "{{ lookup('file', htpasswd_file.path) }}"
+
+- name: Delete temporary htpasswd file
+  file:
+    path: "{{ htpasswd_file.path }}"
+    state: absent
+
+- name: Create authentication configuration
+  k8s:
+    resource_definition: "{{ lookup('template', item ~ '.yaml.j2') }}"
+  loop:
+    - htpasswd-secret
+    - ldap-bind-secret
+    - ldap-ca-config-map
+    - oauth
+...
