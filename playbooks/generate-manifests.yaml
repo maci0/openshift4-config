@@ -1,47 +1,53 @@
 ---
-- hosts: localhost
+- name: Generate OpenShift configuration manifests
+  hosts: localhost
   become: false
   gather_facts: false
   vars:
-    template_path: "../templates/"
-    temp_dir_path: "../generated-manifests"
+    template_path : ../templates/
+    manifests_path: ../generated-manifests
   vars_files:
-    - "../vars.yaml"
+    - ../vars.yaml
 
   tasks:
-  - name: Clean manifests dir
-    shell: "rm -rf {{ temp_dir_path}}/*"
+  - name: Delete manifests dir
+    file:
+      path: "{{ manifests_path }}"
+      state: absent
+
+  - name: Create manifests dir
+    file:
+      path: "{{ manifests_path }}"
+      state: directory
 
   - block:
-    - name: Populate templates directory structure in manifests dir
+    - name: Populate all templates directory structure in manifests dir
       file:
         state: directory
-        dest: "{{temp_dir_path}}/{{ item.path }}"
-      with_filetree: "{{ template_path }}"
+        dest: "{{ manifests_path }}/{{ item.path }}"
+      with_filetree: "{{  template_path  }}"
       when: item.state == 'directory'
 
-    - name: Populate templates
+    - name: Populate all templates
       template:
         src: "{{ item.src }}"
-        dest: "{{temp_dir_path}}/{{ item.path }}"
-      with_filetree: "{{template_path}}"
+        dest: "{{ manifests_path }}/{{ item.path }}"
+      with_filetree: "{{ template_path }}"
       when: item.state == 'file'
     when: applied_config is not defined
 
   - block:
-    - name: Populate templates directory structure in manifests dir
+    - name: Populate filtered templates directory structure in manifests dir
       file:
         state: directory
-        dest: "{{temp_dir_path}}/{{ item }}"
+        dest: "{{ manifests_path }}/{{ item }}"
       with_items: "{{ applied_config }}"
     
-    - name: Populate templates
+    - name: Populate filtered templates
       template:
         src: "{{ item.src }}"
-        dest: "{{temp_dir_path}}/{{ item.path }}"
-      with_filetree: "{{template_path}}"
+        dest: "{{ manifests_path }}/{{ item.path }}"
+      with_filetree: "{{ template_path }}"
       when: item.path | dirname in applied_config and item.state == 'file'
     when: applied_config is defined
-
 ...
-    

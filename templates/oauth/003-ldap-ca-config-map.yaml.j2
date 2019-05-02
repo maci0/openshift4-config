@@ -1,0 +1,10 @@
+{% if ldap_ca_cert is defined %}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ldap-ca-config-map
+  namespace: openshift-config
+data:
+  ca.crt: |
+    {{ lookup('file', ldap_ca_cert) | regex_replace('\n', '\n    ') }}
+{% endif %}

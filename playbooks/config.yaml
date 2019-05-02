@@ -1,0 +1,66 @@
+---
+- name: Apply OpenShift configuration manifests
+  hosts: localhost
+  become: false
+  gather_facts: false
+  vars:
+    template_path: ../templates/
+  vars_files:
+    - ../vars.yaml
+
+  tasks:
+  - name: Create temporary directory
+    tempfile:
+      state: directory
+    register: tempdir
+
+# if applied config is not defined then proceed with whole templates directory
+  - block:
+    - name: Populate all templates directory structure in manifests dir
+      file:
+        state: directory
+        dest: "{{ tempdir.path }}/{{ item.path }}"
+      with_filetree: "{{ template_path }}"
+      when: item.state == 'directory'
+
+    - name: Populate all templates
+      template:
+        src: "{{ item.src }}"
+        dest: "{{ tempdir.path }}/{{ item.path }}"
+      with_filetree: "{{ template_path }}"
+      when: item.state == 'file'
+    when: applied_config is not defined
+
+# if applied config is defined then proceed only with defined subdirectories
+  - block:
+    - name: Populate filtered templates directory structure in manifests dir
+      file:
+        state: directory
+        dest: "{{ tempdir.path }}/{{ item }}"
+      loop: "{{ applied_config }}"
+
+    - name: Populate filtered templates
+      template:
+        src: "{{ item.src }}"
+        dest: "{{ tempdir.path }}/{{ item.path }}"
+      with_filetree: "{{ template_path }}"
+      when: item.path | dirname in applied_config and item.state == 'file'
+    when: applied_config is defined
+
+  - name: List manifest files
+    find:
+      paths: "{{ tempdir.path }}"
+      recurse: yes
+      file_type: file
+    register: manifests
+
+  - name: Create/update OpenShift objects
+    k8s:
+      src: "{{ item }}"
+    loop: "{{ manifests.files | map(attribute='path') | sort | list }}"
+
+  - name: Delete tempdir
+    file:
+      path: "{{ tempdir.path }}"
+      state: absent
+...

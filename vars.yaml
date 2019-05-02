@@ -1,6 +1,6 @@
 applied_config:
   - image-policy
-  - oauth/ldap
+  - oauth
 
 registries_conf: |
   [registries.search]
@@ -24,11 +24,9 @@ source_allowed_registries:
   - registry.redhat.io
   - registry.access.redhat.com
 
-
-oc: /usr/bin/oc --config /etc/origin/master/admin.kubeconfig
-
-# password for the local admin user
-local_admin_password: CHANGEME
+# example local authentication configuration
+htpasswd: |
+  admin:$apr1$GcfRV11Y$Go6JUS4/7ej4Z8.nNbHZZ.
 
 # example LDAP configuration
 #ldap_provider_name: Active_Directory

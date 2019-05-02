@@ -1,9 +1,0 @@
----
-- name: Configure OpenShift 4
-  hosts: localhost
-  gather_facts: no
-  vars_files:
-    - vars.yaml
-  tasks:
-    - import_tasks: tasks/authentication.yaml
-...
