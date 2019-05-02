@@ -19,13 +19,13 @@
       state: directory
     register: tempdir
 
-  - name: Populate filtered templates directory structure in manifests dir
+  - name: Populate templates directory structure in manifests dir
     file:
       state: directory
       dest: "{{ tempdir.path }}/{{ item }}"
     loop: "{{ applied_config }}"
 
-  - name: Populate filtered templates
+  - name: Populate templates
     template:
       src: "{{ item.src }}"
       dest: "{{ tempdir.path }}/{{ item.path | replace('yaml.j2','yaml') }}"
