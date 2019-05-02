@@ -9,43 +9,28 @@
     - ../vars.yaml
 
   tasks:
+
+  - fail:
+      msg: "applied_config variable is not defined - nothing to do - exiting..."
+    when: applied_config is not defined
+
   - name: Create temporary directory
     tempfile:
       state: directory
     register: tempdir
 
-# if applied config is not defined then proceed with whole templates directory
-  - block:
-    - name: Populate all templates directory structure in manifests dir
-      file:
-        state: directory
-        dest: "{{ tempdir.path }}/{{ item.path }}"
-      with_filetree: "{{ template_path }}"
-      when: item.state == 'directory'
+  - name: Populate filtered templates directory structure in manifests dir
+    file:
+      state: directory
+      dest: "{{ tempdir.path }}/{{ item }}"
+    loop: "{{ applied_config }}"
 
-    - name: Populate all templates
-      template:
-        src: "{{ item.src }}"
-        dest: "{{ tempdir.path }}/{{ item.path }}"
-      with_filetree: "{{ template_path }}"
-      when: item.state == 'file'
-    when: applied_config is not defined
-
-# if applied config is defined then proceed only with defined subdirectories
-  - block:
-    - name: Populate filtered templates directory structure in manifests dir
-      file:
-        state: directory
-        dest: "{{ tempdir.path }}/{{ item }}"
-      loop: "{{ applied_config }}"
-
-    - name: Populate filtered templates
-      template:
-        src: "{{ item.src }}"
-        dest: "{{ tempdir.path }}/{{ item.path }}"
-      with_filetree: "{{ template_path }}"
-      when: item.path | dirname in applied_config and item.state == 'file'
-    when: applied_config is defined
+  - name: Populate filtered templates
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ tempdir.path }}/{{ item.path | replace('yaml.j2','yaml') }}"
+    with_filetree: "{{ template_path }}"
+    when: item.path | dirname in applied_config and item.state == 'file'
 
   - name: List manifest files
     find:

@@ -10,6 +10,11 @@
     - ../vars.yaml
 
   tasks:
+
+  - fail:
+      msg: "applied_config variable is not defined - nothing to do - exiting..."
+    when: applied_config is not defined
+
   - name: Delete manifests dir
     file:
       path: "{{ manifests_path }}"
@@ -20,34 +25,16 @@
       path: "{{ manifests_path }}"
       state: directory
 
-  - block:
-    - name: Populate all templates directory structure in manifests dir
-      file:
-        state: directory
-        dest: "{{ manifests_path }}/{{ item.path }}"
-      with_filetree: "{{  template_path  }}"
-      when: item.state == 'directory'
-
-    - name: Populate all templates
-      template:
-        src: "{{ item.src }}"
-        dest: "{{ manifests_path }}/{{ item.path }}"
-      with_filetree: "{{ template_path }}"
-      when: item.state == 'file'
-    when: applied_config is not defined
-
-  - block:
-    - name: Populate filtered templates directory structure in manifests dir
-      file:
-        state: directory
-        dest: "{{ manifests_path }}/{{ item }}"
-      with_items: "{{ applied_config }}"
+  - name: Populate filtered templates directory structure in manifests dir
+    file:
+      state: directory
+      dest: "{{ manifests_path }}/{{ item }}"
+    with_items: "{{ applied_config }}"
     
-    - name: Populate filtered templates
-      template:
-        src: "{{ item.src }}"
-        dest: "{{ manifests_path }}/{{ item.path }}"
-      with_filetree: "{{ template_path }}"
-      when: item.path | dirname in applied_config and item.state == 'file'
-    when: applied_config is defined
+  - name: Populate filtered templates
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ manifests_path }}/{{ item.path | replace('yaml.j2','yaml')}}"
+    with_filetree: "{{ template_path }}"
+    when: item.path | dirname in applied_config and item.state == 'file'
 ...
