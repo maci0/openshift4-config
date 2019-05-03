@@ -6,5 +6,5 @@ metadata:
   namespace: openshift-config
 data:
   ca.crt: |
-    {{ lookup('file', ldap_ca_cert) | regex_replace('\n', '\n    ') }}
+    {{ ldap_ca_cert | regex_replace('\n', '\n    ') }}
 {% endif %}

@@ -32,7 +32,11 @@ htpasswd: |
 #ldap_provider_name: Active_Directory
 #ldap_url: ldaps://ad1.example.com/ou=engineering,dc=example,dc=com?sAMAccountName
 #ldap_insecure: false
-#ldap_ca_cert: ACME-root-ca.crt
+
+#ldap_ca_cert: |
+#  -----BEGIN CERTIFICATE-----
+#  ...
+#  -----END CERTIFICATE-----
 
 #ldap_bind_dn: CN=svc_ocp_auth,ou=Service Accounts,dc=example,dc=com
 #ldap_bind_password: CHANGEME
