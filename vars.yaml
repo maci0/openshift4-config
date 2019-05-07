@@ -16,14 +16,16 @@ registries_for_import:
     insecure: false
   - domainName: quay.io
     insecure: false
+  - domainName: registry.access.redhat.com
+    insecure: false
 
-#source_blocked_registries:
-#  - docker.io
-#  - dockerhub.com
+source_blocked_registries:
+  - docker.io
+  - dockerhub.com
 
-source_allowed_registries:
-  - registry.redhat.io
-  - registry.access.redhat.com
+#source_allowed_registries:
+#  - registry.redhat.io
+#  - registry.access.redhat.com
 
 # example local authentication configuration
 htpasswd: |
