@@ -28,6 +28,10 @@ source_allowed_registries:
 htpasswd: |
   admin:$apr1$GcfRV11Y$Go6JUS4/7ej4Z8.nNbHZZ.
 
+# if this is defined, the cluster-admin role is granted to the given
+# user
+cluster_admin_user: admin
+
 # example LDAP configuration
 #ldap_provider_name: Active_Directory
 #ldap_url: ldaps://ad1.example.com/ou=engineering,dc=example,dc=com?sAMAccountName
