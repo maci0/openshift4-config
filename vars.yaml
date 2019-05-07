@@ -17,9 +17,9 @@ registries_for_import:
   - domainName: quay.io
     insecure: false
 
-source_blocked_registries:
-  - docker.io
-  - dockerhub.com
+#source_blocked_registries:
+#  - docker.io
+#  - dockerhub.com
 
 source_allowed_registries:
   - registry.redhat.io
