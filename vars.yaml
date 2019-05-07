@@ -21,7 +21,6 @@ registries_for_import:
 
 source_blocked_registries:
   - docker.io
-  - dockerhub.com
 
 #source_allowed_registries:
 #  - registry.redhat.io
