@@ -1,6 +1,7 @@
 applied_config:
   - image-policy
   - oauth
+  - logging
 
 registries_conf: |
   [registries.search]
