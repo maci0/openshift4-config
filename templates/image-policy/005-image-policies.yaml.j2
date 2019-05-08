@@ -10,14 +10,16 @@ spec:
 
 {% if source_blocked_registries is defined or source_allowed_registries is defined %}
   registrySources:
+
+      blockedRegistries:
+
 {% endif %}
 
 {% if source_blocked_registries is defined and source_allowed_registries is not defined %}
-      blockedRegistries:
       {{ source_blocked_registries | to_nice_yaml | replace ('\n','\n      ') }}
 {% endif %}
-{% if source_allowed_registries is defined and source_blocked_registries is not defined%}
       allowedRegistries:
+{% if source_allowed_registries is defined and source_blocked_registries is not defined%}
       {{ source_allowed_registries | to_nice_yaml | replace ('\n','\n      ')}}
 {% endif %}
 
