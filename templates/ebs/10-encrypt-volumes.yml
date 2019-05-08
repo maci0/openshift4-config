@@ -8,7 +8,6 @@ provisioner: kubernetes.io/{{ ebs_provisioner }}
 parameters:
   type: "{{ ebs_type }}" 
   zone: "{{ availability_zone }}" 
-  iopsPerGB: "10" 
   encrypted: "{{ encrypt_bool }}" 
   fsType: "{{ fs_type }}" 
 ...
