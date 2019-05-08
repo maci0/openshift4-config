@@ -3,6 +3,7 @@ kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
   name: "{{ storage_class_name }}"
+  storageclass.kubernetes.io/is-default-class: "{{ is_default_storage_class }}"
 provisioner: kubernetes.io/{{ ebs_provisioner }}
 parameters:
   type: "{{ ebs_type }}" 
