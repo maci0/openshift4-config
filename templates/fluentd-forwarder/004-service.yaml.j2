@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.openshift.io/serving-cert-secret-name: secure-forwarder-cert
+  labels:
+    template: fluentd-splunk-forwarder
+  name: fluentd-splunk-forwarder
+  namespace: infra-logging-splunk
+spec:
+  ports:
+  - name: fluentd-splunk-forwarder
+    port: 24224
+  selector:
+    deploymentconfig: fluentd-splunk-forwarder

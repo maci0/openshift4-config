@@ -1,0 +1,112 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    template: fluentd-splunk-forwarder
+  name: fluentd-conf
+  namespace: infra-logging-splunk
+data:
+  input-secure-forward.conf: |
+    <source>
+      @type forward
+
+      <security>
+        self_hostname "fluentd-secure-forwarder.#{ENV['NAMESPACE']}.svc"
+        shared_key "#{ENV['SF_SHARED_KEY']}"
+      </security>
+
+      <transport tls>
+        cert_path /etc/fluent/certs/tls.crt
+        private_key_path /etc/fluent/certs/tls.key
+        private_key_passphrase ""
+      </transport>
+    </source>
+  transform.conf: |
+    <filter **>
+      @type record_transformer
+
+      <record>
+        cluster_id "#{ENV['CLUSTER_ID']}"
+      </record>
+    </filter>
+
+    <match output_tag>
+      @type rewrite_tag_filter
+
+      <rule>
+        key viaq_index_name
+        pattern ^\.operations
+        tag operations
+      </rule>
+
+      <rule>
+        key viaq_index_name
+        pattern ^project
+        tag applications
+      </rule>
+    </match>
+
+    <filter operations>
+      @type record_transformer
+
+      <record>
+        source_type operations
+      </record>
+    </filter>
+
+    <filter applications>
+      @type record_transformer
+
+      <record>
+        source_type applications
+      </record>
+    </filter>
+  output-splunk.conf: |
+{% if splunk_type == 'hec' %}
+    # This is useful for debugging.
+    #<match **>
+    #  @type stdout
+    #</match>
+
+    <match **>
+      @type splunk_hec
+      host "#{ENV['SPLUNK_HOST']}"
+      port "#{ENV['SPLUNK_PORT']}"
+      token "#{ENV['SPLUNK_HEC_TOKEN']}"
+
+      source_key cluster_id
+
+      use_ssl true
+      ssl_verify "#{ENV['SPLUNK_SSL_VERIFY']}"
+    </match>
+{% elif splunk_type == 'tcp' %}
+    # This is useful for debugging.
+    #<match **>
+    #  @type stdout
+    #</match>
+
+    <match **>
+      @type splunk_tcp
+      host "#{ENV['SPLUNK_HOST']}"
+      port "#{ENV['SPLUNK_PORT']}"
+
+      format raw
+      event_key message
+
+      <buffer>
+        chunk_limit_size 10m
+        chunk_limit_records 128
+        flush_interval 1s
+      </buffer>
+    </match>
+{% endif %}
+  fluent.conf: |
+    <system>
+      log_level warn
+      log_rotate_age 10
+      log_rotate_size 1024000
+    </system>
+
+    @include configs.d/user/input-secure-forward.conf
+    @include configs.d/user/transform.conf
+    @include configs.d/user/output-splunk.conf

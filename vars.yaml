@@ -2,6 +2,7 @@ applied_config:
   - image-policy
   - oauth
   - logging
+  - fluentd-forwarder
 
 registries_conf: |
   [registries.search]
@@ -57,4 +58,13 @@ cluster_admin_user: admin
 #      - dn
 #    preferredUsername:
 #      - sAMAccountName
+
+fluentd_git_url: git@bitbucket.org:omnitracslab/admin-fluentd-forwarder.git
+fluentd_git_branch: master
+fluentd_git_context_dir: fluentd-splunk-forwarder-image
+
+splunk_type: hec
+splunk_host: 192.168.66.65
+splunk_port: 8088
+splunk_ssl_verify: 'false'
 ...

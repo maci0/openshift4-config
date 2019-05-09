@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-openshift-logging
+  namespace: infra-logging-splunk
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: openshift-logging
+podSelector: {}
+policyTypes:
+  - Ingress

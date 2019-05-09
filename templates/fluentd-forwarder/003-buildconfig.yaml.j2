@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  labels:
+    template: fluentd-splunk-forwarder
+  name: fluentd-splunk-forwarder
+  namespace: infra-logging-splunk
+spec:
+  failedBuildsHistoryLimit: 5
+  output:
+    to:
+      kind: ImageStreamTag
+      name: fluentd-splunk-forwarder:latest
+  runPolicy: Serial
+  source:
+    contextDir: {{ fluentd_git_context_dir }}
+    git:
+      ref: {{ fluentd_git_branch }}
+      uri: {{ fluentd_git_url }}
+    sourceSecret:
+      name: git-ssh
+    type: Git
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: ruby:2.5
+        namespace: openshift
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - type: ConfigChange
+  - type: ImageChange
