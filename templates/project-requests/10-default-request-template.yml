@@ -116,10 +116,10 @@ objects:
     name: ${PROJECT_NAME}-quota
   spec:
     hard:
-      limits.cpu: "{{ quota_limit_cpu }} 6"
-      limits.memory: "{{ quota_limit_memory }} 4Gi"
-      requests.cpu: "{{ quota_request_cpu }} 4"
-      requests.memory: "{{ quota_request_memory }} 4Gi"
+      limits.cpu: "{{ quota_limit_cpu }}"
+      limits.memory: "{{ quota_limit_memory }}"
+      requests.cpu: "{{ quota_request_cpu }}"
+      requests.memory: "{{ quota_request_memory }}"
 - apiVersion: v1
   kind: LimitRange
   metadata:
@@ -127,20 +127,20 @@ objects:
   spec:
     limits:
     - default:
-        cpu: "{{ limitrange_default_cpu }} 500m"
-        memory: "{{ limitrange_default_memory }} 512Mi"
+        cpu: "{{ limitrange_default_cpu }}"
+        memory: "{{ limitrange_default_memory }}"
       defaultRequest:
-        cpu: "{{ limitrange_request_cpu }} 100m"
-        memory: "{{ limitrange_request_memory }} 256Mi"
+        cpu: "{{ limitrange_request_cpu }}"
+        memory: "{{ limitrange_request_memory }}"
       max:
-        cpu: "{{ limitrange_request_max_cpu }} 4"
-        memory: "{{ limitrange_request_max_memory }} 2Gi"
+        cpu: "{{ limitrange_request_max_cpu }}"
+        memory: "{{ limitrange_request_max_memory }}"
       maxLimitsRequestRatio:
-        cpu: "{{ limitrange_request_max_ratio_cpu }} 10"
-        memory: "{{ limitrange_request_max_ratio_memory }} 16"
+        cpu: "{{ limitrange_request_max_ratio_cpu }}"
+        memory: "{{ limitrange_request_max_ratio_memory }}"
       min:
-        cpu: "{{ limitrange_request_min_cpu }} 100m"
-        memory: "{{ limitrange_request_min_memory }} 64Mi"
+        cpu: "{{ limitrange_request_min_cpu }}"
+        memory: "{{ limitrange_request_min_memory }}"
       type: Container
 parameters:
 - name: PROJECT_NAME
