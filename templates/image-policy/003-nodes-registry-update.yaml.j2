@@ -1,3 +1,4 @@
+{% if registries_conf is defined %}
 apiVersion: machineconfiguration.openshift.io/v1
 kind: MachineConfig
 metadata:
@@ -15,4 +16,5 @@ spec:
         filesystem: root
         mode: 420
         path: /etc/containers/registries.conf
+{% endif %}
 
