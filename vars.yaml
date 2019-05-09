@@ -2,6 +2,7 @@ applied_config:
   - image-policy
   - oauth
   - logging
+  - project-template
 
 registries_conf: |
   [registries.search]
@@ -19,6 +20,7 @@ registries_for_import:
   - domainName: registry.access.redhat.com
     insecure: false
 
+#Specify either source_blocked_registries or source_allowed_registries
 source_blocked_registries:
   - docker.io
 
@@ -57,4 +59,32 @@ cluster_admin_user: admin
 #      - dn
 #    preferredUsername:
 #      - sAMAccountName
+default_project_template_name: project-request
+
+default_resource_quota: | 
+  limits.cpu: '6'
+  limits.memory: 4Gi
+  requests.cpu: '4'
+  requests.memory: 4Gi
+
+default_limit_range: |
+        - default:
+            cpu: 500m
+            memory: 512Mi
+          defaultRequest:
+            cpu: 100m
+            memory: 256Mi
+          max:
+            cpu: '4'
+            memory: 2Gi
+          maxLimitsRequestRatio:
+            cpu: '10'
+            memory: '16'
+          min:
+            cpu: 100m
+            memory: 64Mi
+          type: Container
+
+
+
 ...
