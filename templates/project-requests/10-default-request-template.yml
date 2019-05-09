@@ -3,10 +3,9 @@ kind: Template
 apiVersion: template.openshift.io/v1
 metadata:
   annotations:
-  name: project-request
-  namespace: default
+  name: "{{ request_template_name }}"
+  namespace: "{{ request_template_namespace }}"
   resourceVersion: "1591"
-  selfLink: /apis/template.openshift.io/v1/namespaces/default/templates/project-request
 objects:
 - apiVersion: project.openshift.io/v1
   kind: Project
@@ -117,10 +116,10 @@ objects:
     name: ${PROJECT_NAME}-quota
   spec:
     hard:
-      limits.cpu: "6"
-      limits.memory: 4Gi
-      requests.cpu: "4"
-      requests.memory: 4Gi
+      limits.cpu: "{{ quota_limit_cpu }} 6"
+      limits.memory: "{{ quota_limit_memory }} 4Gi"
+      requests.cpu: "{{ quota_request_cpu }} 4"
+      requests.memory: "{{ quota_request_memory }} 4Gi"
 - apiVersion: v1
   kind: LimitRange
   metadata:
@@ -128,20 +127,20 @@ objects:
   spec:
     limits:
     - default:
-        cpu: 500m
-        memory: 512Mi
+        cpu: "{{ limitrange_default_cpu }} 500m"
+        memory: "{{ limitrange_default_memory }} 512Mi"
       defaultRequest:
-        cpu: 100m
-        memory: 256Mi
+        cpu: "{{ limitrange_request_cpu }} 100m"
+        memory: "{{ limitrange_request_memory }} 256Mi"
       max:
-        cpu: "4"
-        memory: 2Gi
+        cpu: "{{ limitrange_request_max_cpu }} 4"
+        memory: "{{ limitrange_request_max_memory }} 2Gi"
       maxLimitsRequestRatio:
-        cpu: "10"
-        memory: "16"
+        cpu: "{{ limitrange_request_max_ratio_cpu }} 10"
+        memory: "{{ limitrange_request_max_ratio_memory }} 16"
       min:
-        cpu: 100m
-        memory: 64Mi
+        cpu: "{{ limitrange_request_min_cpu }} 100m"
+        memory: "{{ limitrange_request_min_memory }} 64Mi"
       type: Container
 parameters:
 - name: PROJECT_NAME
