@@ -20,6 +20,8 @@ registries_for_import:
     insecure: false
   - domainName: registry.access.redhat.com
     insecure: false
+  - domainName: omnitracs-docker-redhat-mirror.jfrog.io
+    insecure: false
 
 #Specify either source_blocked_registries or source_allowed_registries
 source_blocked_registries:
@@ -61,7 +63,7 @@ cluster_admin_user: admin
 #    preferredUsername:
 #      - sAMAccountName
 
-fluentd_git_url: git@bitbucket.org:omnitracslab/admin-fluentd-forwarder.git
+fluentd_git_url: git@bitbucket.org:<>/admin-fluentd-forwarder.git
 fluentd_git_branch: master
 fluentd_git_context_dir: fluentd-splunk-forwarder-image
 
