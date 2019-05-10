@@ -4,6 +4,7 @@ applied_config:
   - logging
   - project-template
   - fluentd-forwarder
+  - monitoring
 
 registries_conf: |
   [registries.search]
@@ -19,8 +20,6 @@ registries_for_import:
   - domainName: quay.io
     insecure: false
   - domainName: registry.access.redhat.com
-    insecure: false
-  - domainName: omnitracs-docker-redhat-mirror.jfrog.io
     insecure: false
 
 #Specify either source_blocked_registries or source_allowed_registries
@@ -71,6 +70,8 @@ splunk_type: hec
 splunk_host: 192.168.66.65
 splunk_port: 8088
 splunk_ssl_verify: 'false'
+
+prometheus_storage_size: 10Gi
 
 default_project_template_name: project-request
 
