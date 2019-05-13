@@ -9,5 +9,5 @@
   - ../vars.yaml
 
   tasks:
-  - import_tasks: apply-manifests.yaml
+  - import_tasks: ../tasks/apply-manifests.yaml
 ...
