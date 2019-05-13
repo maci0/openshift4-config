@@ -26,6 +26,9 @@ registries_for_import:
     insecure: false
   - domainName: registry.access.redhat.com
     insecure: false
+  - domainName: omnitracs-docker-redhat-mirror.jfrog.io
+    insecure: false
+
 
 #Specify either list of source_blocked_registries or list of source_allowed_registries - to use as build pull/push
 source_blocked_registries:
