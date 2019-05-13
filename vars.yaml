@@ -4,6 +4,11 @@ applied_config:
   - logging
   - project-template
   - fluentd-forwarder
+  - monitoring
+
+# OPENSHIFT IMAGE POLICY CONFIGURATION
+#
+# Content registries.conf on openshift worker nodes
 
 registries_conf: |
   [registries.search]
@@ -13,6 +18,7 @@ registries_conf: |
   [registries.block]
   registries = ['docker.io']
 
+# List of registries allowed to import images from
 registries_for_import:
   - domainName: registry.redhat.io
     insecure: false
@@ -21,13 +27,15 @@ registries_for_import:
   - domainName: registry.access.redhat.com
     insecure: false
 
-#Specify either source_blocked_registries or source_allowed_registries
+#Specify either list of source_blocked_registries or list of source_allowed_registries - to use as build pull/push
 source_blocked_registries:
   - docker.io
 
 #source_allowed_registries:
 #  - registry.redhat.io
 #  - registry.access.redhat.com
+
+# ====================
 
 # example local authentication configuration
 htpasswd: |
@@ -70,14 +78,24 @@ splunk_host: 192.168.66.65
 splunk_port: 8088
 splunk_ssl_verify: 'false'
 
+# OPENSHIFT MONITORING CONFIGURATION
+#
+# Define size for prometheus persitent storage
+prometheus_storage_size: 10Gi
+
+# OPENSHIFT DEFAULT PROJECT TEMPLATE CONFIGURATION
+#
+# Default project template name. Project template have to be created in openshift-config namespace
 default_project_template_name: project-request
 
+# Default resource quota
 default_resource_quota: | 
   limits.cpu: '6'
   limits.memory: 4Gi
   requests.cpu: '4'
   requests.memory: 4Gi
 
+#Default limit ranges
 default_limit_range: |
         - default:
             cpu: 500m
