@@ -6,46 +6,8 @@
   vars:
     template_path: ../templates/
   vars_files:
-    - ../vars.yaml
+  - ../vars.yaml
 
   tasks:
-
-  - fail:
-      msg: "applied_config variable is not defined - nothing to do - exiting..."
-    when: applied_config is not defined
-
-  - name: Create temporary directory
-    tempfile:
-      state: directory
-    register: tempdir
-
-  - name: Populate templates directory structure in manifests dir
-    file:
-      state: directory
-      dest: "{{ tempdir.path }}/{{ item }}"
-    loop: "{{ applied_config }}"
-
-  - name: Populate templates
-    template:
-      src: "{{ item.src }}"
-      dest: "{{ tempdir.path }}/{{ item.path | replace('yaml.j2','yaml') }}"
-    with_filetree: "{{ template_path }}"
-    when: item.path | dirname in applied_config and item.state == 'file'
-
-  - name: List manifest files
-    find:
-      paths: "{{ tempdir.path }}"
-      recurse: yes
-      file_type: file
-    register: manifests
-
-  - name: Create/update OpenShift objects
-    k8s:
-      src: "{{ item }}"
-    loop: "{{ manifests.files | map(attribute='path') | sort | list }}"
-
-  - name: Delete tempdir
-    file:
-      path: "{{ tempdir.path }}"
-      state: absent
+  - import_tasks: apply-manifests.yaml
 ...
