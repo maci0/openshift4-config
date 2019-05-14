@@ -1,4 +1,4 @@
-{% if prometheus_storage_size is defined %}
+{% if prometheus_storage_size is defined or monitoring_on_infra_nodes == true %}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -7,12 +7,38 @@ metadata:
 data:
  config.yaml: |
 {% endif %}
-{% if prometheus_storage_size is defined %}
+{% if prometheus_storage_size is defined or monitoring_on_infra_nodes ==true %}
      prometheusK8s:
+{% endif %}
+{% if prometheus_storage_size is defined %}
        volumeClaimTemplate:
         spec:
           resources:
             requests:
               storage: {{ prometheus_storage_size }}
+{% endif %}
+{% if monitoring_on_infra_nodes == true %}
+        nodeSelector:
+          node-role.kubernetes.io/infra: ""
+      alertmanagerMain:
+        nodeSelector:
+          node-role.kubernetes.io/infra: ""
+      prometheusOperator:
+        nodeSelector:
+          node-role.kubernetes.io/infra: ""
+      grafana:
+        nodeSelector:
+          node-role.kubernetes.io/infra: ""
+      k8sPrometheusAdapter:
+        nodeSelector:
+          node-role.kubernetes.io/infra: ""
+      kubeStateMetrics:
+        nodeSelector:
+          node-role.kubernetes.io/infra: ""
+      telemeterClient:
+        nodeSelector:
+          node-role.kubernetes.io/infra: ""
+
+
 {% endif %}
 
