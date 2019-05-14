@@ -76,6 +76,10 @@ cluster_admin_user: admin
 # Define size for prometheus persitent storage
 prometheus_storage_size: 10Gi
 
+# Set true to move all manitoring pods to infra nodes
+monitoring_on_infra_nodes: true
+
+
 # OPENSHIFT DEFAULT PROJECT TEMPLATE CONFIGURATION
 #
 # Default project template name. Project template have to be created in openshift-config namespace
