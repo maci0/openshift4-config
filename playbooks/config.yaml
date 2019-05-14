@@ -4,7 +4,7 @@
   become: false
   gather_facts: false
   vars:
-    template_path: ../templates/
+    template_path: "{{ playbook_dir }}/../templates/"
   vars_files:
   - ../vars.yaml
 
