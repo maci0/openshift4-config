@@ -32,6 +32,10 @@
 - name: Create/update OpenShift objects
   k8s:
     src: "{{ item }}"
+  register: k8s_result
+  until: k8s_result is success
+  retries: 18
+  delay: 10
   loop: "{{ manifests.files | map(attribute='path') | sort | list }}"
 
 - name: Delete tempdir
