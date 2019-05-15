@@ -5,6 +5,8 @@ metadata:
   namespace: openshift-logging
 spec:
   channel: preview
-  name: cluster-logging
-  source: cluster-logging-config
+  installPlanApproval: Automatic
+  source: installed-community-openshift-logging
   sourceNamespace: openshift-logging
+  name: cluster-logging
+  startingCSV: clusterlogging.v4.1.0
