@@ -3,7 +3,6 @@ applied_config:
   - oauth
   - logging
   - project-template
-  - fluentd-forwarder
   - monitoring
 
 registries_conf: |
@@ -61,10 +60,6 @@ cluster_admin_user: admin
 #      - dn
 #    preferredUsername:
 #      - sAMAccountName
-
-fluentd_git_url: git@bitbucket.org:<>/admin-fluentd-forwarder.git
-fluentd_git_branch: master
-fluentd_git_context_dir: fluentd-splunk-forwarder-image
 
 splunk_type: hec
 splunk_host: 192.168.66.65
