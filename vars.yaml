@@ -82,7 +82,7 @@ splunk_ssl_verify: 'false'
 prometheus_storage_size: 10Gi
 
 # Set true to move all manitoring pods to infra nodes
-monitoring_on_infra_nodes: true
+monitoring_on_infra_nodes: false
 
 # OPENSHIFT DEFAULT PROJECT TEMPLATE CONFIGURATION
 #
