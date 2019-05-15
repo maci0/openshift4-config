@@ -71,6 +71,11 @@ cluster_admin_user: admin
 #    preferredUsername:
 #      - sAMAccountName
 
+splunk_type: hec
+splunk_host: 192.168.66.65
+splunk_port: 8088
+splunk_ssl_verify: 'false'
+
 # OPENSHIFT MONITORING CONFIGURATION
 #
 # Define size for prometheus persitent storage
@@ -78,7 +83,6 @@ prometheus_storage_size: 10Gi
 
 # Set true to move all manitoring pods to infra nodes
 monitoring_on_infra_nodes: true
-
 
 # OPENSHIFT DEFAULT PROJECT TEMPLATE CONFIGURATION
 #
