@@ -2,7 +2,7 @@
 applied_config:
   - image-policy
   - oauth
-  - logging
+#  - logging
   - project-template
   - monitoring
 
