@@ -1,0 +1,53 @@
+{% if ldap_url is defined %}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ldap
+  namespace: infra-cronjobs
+data:
+{% if ldap_ca_cert is defined %}
+  ca.crt: |
+    {{ ldap_ca_cert | regex_replace('\n', '\n    ') }}
+{% endif %}
+  ldap-group-sync.yaml: |
+    kind: LDAPSyncConfig
+    apiVersion: v1
+    url: {{ ldap_url }}
+    insecure: {{ ldap_insecure }}
+{% if ldap_ca_cert is defined %}
+    ca: /etc/config/ca.crt
+{% endif %}
+    bindDN: {{ ldap_bind_dn }}
+    bindPassword: {{ ldap_bind_password }}
+    rfc2307:
+      groupsQuery:
+        baseDN: {{ ldap_groups_query['base_dn'] }}
+        scope: sub
+        derefAliases: never
+{% if 'filter' in ldap_groups_query %}
+        filter: {{ ldap_groups_query['filter'] }}
+{% endif %}
+        pageSize: 0
+      groupUIDAttribute: distinguishedName
+      groupMembershipAttributes: [member]
+      groupNameAttributes: [cn]
+      usersQuery:
+        baseDN: {{ ldap_users_query['base_dn'] }}
+        scope: sub
+        derefAliases: never
+        pageSize: 0
+{% if 'filter' in ldap_groups_query %}
+        filter: {{ ldap_users_query['filter'] }}
+{% endif %}
+      userNameAttributes: [sAMAccountName]
+      userUIDAttribute: distinguishedName
+      tolerateMemberNotFoundErrors: true
+      tolerateMemberOutOfScopeErrors: true
+  ldap-group-sync.sh: |
+    #!/bin/bash
+
+    set -eu
+
+    oc adm groups prune --sync-config=/etc/config/ldap-group-sync.yaml --confirm
+    oc adm groups sync  --sync-config=/etc/config/ldap-group-sync.yaml --confirm
+{% endif %}

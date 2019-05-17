@@ -1,7 +1,7 @@
 ---
 applied_config:
   - image-policy
-  - oauth
+  - authentication
 #  - logging
   - project-template
   - monitoring
@@ -70,6 +70,15 @@ cluster_admin_user: admin
 #      - dn
 #    preferredUsername:
 #      - sAMAccountName
+
+# example LDAP group sync configuration
+#ldap_groups_query:
+#  base_dn: ou=Groups,ou=Corp,dc=example,dc=com
+#  filter: (cn=openshift*)
+
+#ldap_users_query:
+#  base_dn: ou=Corp,dc=example,dc=com
+#  filter: (objectclass=person)
 
 splunk_type: hec
 splunk_host: 192.168.66.65
