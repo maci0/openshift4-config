@@ -1,0 +1,50 @@
+{% if ldap_url is defined %}
+apiVersion: batch/v1
+kind: Job           
+metadata:
+  name: initial-ldap-group-sync
+  namespace: infra-cronjobs
+spec:
+  backoffLimit: 6
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        job-name: initial-ldap-group-sync
+    spec:
+      activeDeadlineSeconds: 500
+      containers:
+      - command:
+        - /etc/config/ldap-group-sync.sh
+        image: quay.io/openshift/origin-cli
+        imagePullPolicy: Always
+        name: ldap-group-sync
+        resources: {}
+        terminationMessagePath: /dev/termination-log 
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/config
+          name: config
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: ldap-group-syncer
+      serviceAccountName: ldap-group-syncer
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: ldap-group-sync.yaml
+            path: ldap-group-sync.yaml
+          - key: ldap-group-sync.sh
+            mode: 493
+            path: ldap-group-sync.sh
+          - key: ca.crt
+            path: ca.crt
+          name: ldap
+        name: config                                                        
+{% endif %}
