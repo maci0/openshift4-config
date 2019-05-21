@@ -1,4 +1,4 @@
-{% if cluster_admin_user is defined %}
+{% if cluster_admin_users is defined or cluster_admin_groups %}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -8,7 +8,14 @@ roleRef:
   kind: ClusterRole
   name: cluster-admin
 subjects:
+{% for user in cluster_admin_users | default([]) %}
 - apiGroup: rbac.authorization.k8s.io
   kind: User
-  name: {{ cluster_admin_user }}
+  name: {{ user }}
+{% endfor %}
+{% for group in cluster_admin_groups | default([]) %}
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: {{ group }}
+{% endfor %}
 {% endif %}
