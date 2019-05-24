@@ -6,8 +6,15 @@
   vars:
     template_path: "{{ playbook_dir }}/../templates/"
   vars_files:
-  - ../vars.yaml
-
+    - ../vars.yaml
   tasks:
-  - import_tasks: ../tasks/apply-manifests.yaml
+    - name: Apply manifests with custom K8s authentication
+      import_tasks: ../tasks/apply-manifests.yaml
+      environment:
+        K8S_AUTH_KUBECONFIG: "{{ kubeconfig_path }}"
+      when: kubeconfig_path is defined
+
+    - name: Apply manifests with default K8s authentication
+      import_tasks: ../tasks/apply-manifests.yaml
+      when: kubeconfig_path is not defined
 ...
