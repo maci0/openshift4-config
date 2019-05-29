@@ -12,6 +12,9 @@ spec:
   jobTemplate:
     spec:
       template:
+        metadata:
+          labels:
+            cronjob: ldap-group-sync
         spec:
           containers:
           - name: ldap-group-sync
